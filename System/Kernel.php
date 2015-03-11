@@ -1,25 +1,24 @@
 <?php
+
 namespace System;
 
 use System\Configuration;
-use System\ServiceFactory;
+use System\ServiceFactory\ServiceFactory;
 
 class Kernel
 {
+    private $configuration;
+    
 	public function init()
     {
 		$classLoader = new \System\Autoloader\Autoloader;
         $classLoader->register();
-        
-        $config = new Configuration();
+
+        $this->configuration = new Configuration();
         $serviceFactory = new ServiceFactory();
         
-        $serviceFactory->addClass('dupa');
-        $serviceFactory->addClass('dupa 2');
+        $routing = $serviceFactory->getService('routing');
+
         
-        $serviceFactory2 = new ServiceFactory();
-        $serviceFactory2->addClass('dupa 3');
-        
-        var_dump($serviceFactory2->getLoadedClasses());
     }
 }
