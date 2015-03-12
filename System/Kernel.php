@@ -9,9 +9,9 @@ class Kernel
 {
     private $configuration;
     
-	public function init()
+    public function init()
     {
-		$classLoader = new \System\Autoloader\Autoloader;
+        $classLoader = new \System\Autoloader\Autoloader;
         $classLoader->register();
 
         $this->configuration = new Configuration();

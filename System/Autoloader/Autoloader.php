@@ -2,16 +2,24 @@
 
 namespace System\Autoloader;
 
-class Autoloader
-{
-	public function register()
-    {
-		$autoload = array($this, 'load');
-		\spl_autoload_register($autoload);
-	}
+use System\Autoloader\AutoloaderException;
 
-	public function load($class)
+class Autoloader 
+{
+    public function register()
     {
-		require_once ROOT_DIR.DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
-	}
+        $autoload = array($this, 'load');
+        \spl_autoload_register($autoload);
+    }
+
+        public function load($class)
+    {
+        $fileName = ROOT_DIR.DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+
+        if (!file_exists($fileName)){
+            throw new AutoloaderException('File <i>'.$fileName.'</i> does not exist');
+        }
+
+        require_once $fileName;
+    }
 }
