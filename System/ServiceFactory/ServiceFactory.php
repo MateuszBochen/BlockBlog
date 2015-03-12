@@ -7,9 +7,10 @@ use System\Configuration;
 
 class ServiceFactory
 {
+    private static $instance;
     private static $loadedClasses = [];
-    private $configuration;
-    private $mainServices = [
+    private static $configuration;
+    private static $mainServices = [
         'routing' => 
             [
                 'class' => 'Services\Routing\Routing',
@@ -17,22 +18,19 @@ class ServiceFactory
                 'prototype' => false
             ]
         ];
-    
-    public function __construct()
-    {
-        $this->configuration = new Configuration();
-        
-        // load services from list TODO
-    }
 
-    public function getService($serviceName)
+    public static function getService($serviceName)
     {
 
-        if (!isset($this->mainServices[$serviceName])) {
+        if (!self::$configuration) {
+            self::$configuration = new Configuration();
+        }
+
+        if (!isset(self::$mainServices[$serviceName])) {
             throw new ServiceFactoryException('Service <i>'.$serviceName.'</i> does not exist');
         }
 
-        $service = $this->mainServices[$serviceName];
+        $service = self::$mainServices[$serviceName];
 
         if (!is_array($service)) {
             throw new ServiceFactoryException('Invalid Service');
@@ -50,10 +48,10 @@ class ServiceFactory
                 $paramName = substr($argument, 1);
 
                 if ($argument[0] == '@') {
-                    $argumentsArray[] = $this->getService($paramName);
+                    $argumentsArray[] = self::$getService($paramName);
                 }
                 elseif($argument[0] == '$') {
-                    $argumentsArray[] = $this->configuration->$paramName;
+                    $argumentsArray[] = self::$configuration->$paramName;
                 }
             }
         }
@@ -68,10 +66,5 @@ class ServiceFactory
         self::$loadedClasses[$serviceName] = $myClassInstance;
 
         return self::$loadedClasses[$serviceName];
-    }
-
-    public function getLoadedClasses()
-    {
-        return self::$loadedClasses;
     }
 }

@@ -15,10 +15,9 @@ class Kernel
         $classLoader->register();
 
         $this->configuration = new Configuration();
-        $serviceFactory = new ServiceFactory();
-        
-        $routing = $serviceFactory->getService('routing');
 
-        
+        $routing = ServiceFactory::getService('routing');
+
+
     }
 }
