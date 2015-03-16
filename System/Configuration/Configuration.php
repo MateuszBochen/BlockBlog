@@ -7,6 +7,8 @@ use System\Configuration\ConfigurationException;
 class Configuration extends ConfigurationException
 {
 
+    private $__loaded = [];
+
     public function __construct()
     {
     
@@ -14,6 +16,10 @@ class Configuration extends ConfigurationException
 
     public function getParam($paramName)
     {
+        if (isset($this->__loaded[$paramName])){
+            return $this->__loaded[$paramName];
+        }
+
         $paramAsArray = explode('.', $paramName);
         $paramName = $fruit = array_shift($paramAsArray);
 
@@ -40,7 +46,7 @@ class Configuration extends ConfigurationException
                 return $lastValue;
             }
         }
-
+        $__loaded[$lastValueAsString] = $lastValue;
         return $lastValue;
     }
 }
