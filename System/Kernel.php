@@ -2,7 +2,7 @@
 
 namespace System;
 
-use System\Configuration;
+use System\Configuration\Configuration;
 use System\ServiceFactory\ServiceFactory;
 
 class Kernel
@@ -15,9 +15,10 @@ class Kernel
         $classLoader->register();
 
         $this->configuration = new Configuration();
-
-        $routing = ServiceFactory::getService('routing');
-
+        
+        $serviceFactory = new ServiceFactory($this->configuration);
+        
+        $routing = $serviceFactory->getService('routing');
 
     }
 }
