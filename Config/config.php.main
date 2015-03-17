@@ -1,0 +1,11 @@
+<?php
+    return [
+        'main' => [],
+        'adminDir' => 'admin',
+        'mysql' => [
+            'user' => '',
+            'password' => '',
+            'port' => '',
+            'databaseName' => '',
+        ]
+    ];

@@ -4,7 +4,6 @@ namespace System\ServiceFactory;
 
 use System\ServiceFactory\ServiceFactoryException;
 
-
 class ServiceFactory
 {
     private $loadedClasses = [];
@@ -17,7 +16,7 @@ class ServiceFactory
                 'prototype' => false
             ]
         ];
-    
+
     public function __construct($configuration)
     {
         $this->configuration = $configuration;
