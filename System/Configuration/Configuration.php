@@ -36,7 +36,7 @@ class Configuration extends ConfigurationException
 
         foreach ($paramAsArray as $key) {
             if (!isset($lastValue[$key])) {
-                throw new ConfigurationException('Param <i>'.$lastValueAsString.'</i> does not exist');
+                throw new ConfigurationException('Param <i>'.$lastValueAsString.'.'.$key.'</i> does not exist');
             }
 
             $lastValueAsString .= '.'.$key;

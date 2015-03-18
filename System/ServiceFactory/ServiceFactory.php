@@ -14,6 +14,18 @@ class ServiceFactory
                 'class' => 'Services\Routing\Routing',
                 'arguments' => [], // @service; $configProperty
                 'prototype' => false
+            ],
+        'db' => 
+            [
+                'class' => 'Simplon\Mysql\Mysql',
+                'arguments' => ['$mysql.host', '$mysql.user', '$mysql.password', '$mysql.databaseName'], // @service; $configProperty
+                'prototype' => false
+            ],
+        'crud' => 
+            [
+                'class' => 'Simplon\Mysql\Crud\SqlCrudManager',
+                'arguments' => ['@db'], // @service; $configProperty
+                'prototype' => false
             ]
         ];
 

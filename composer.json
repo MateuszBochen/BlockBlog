@@ -1,5 +1,14 @@
 {
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mateusz Bochen",
+            "role": "Developer"
+        }
+    ],
     "require": {
-        "simplon/mysql": "*"
+        "simplon/mysql": "*",
+        "php": ">=5.5",
+        "ext-pdo": "*"
     }
 }

@@ -27,7 +27,5 @@ class Kernel
         else {
             $appLauncher = new AppLauncher\UserAppLauncher($routing, $configuration);
         }
-
-        var_dump($appLauncher);
     }
 }
