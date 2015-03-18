@@ -6,13 +6,14 @@ use System\Autoloader\AutoloaderException;
 
 class Autoloader 
 {
+
     public function register()
     {
         $autoload = array($this, 'load');
         \spl_autoload_register($autoload);
     }
 
-        public function load($class)
+    public function load($class)
     {
         $fileName = ROOT_DIR.DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
 

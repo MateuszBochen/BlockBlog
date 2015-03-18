@@ -3,6 +3,7 @@
         'main' => [],
         'adminDir' => 'admin',
         'mysql' => [
+            'host' => '',
             'user' => '',
             'password' => '',
             'port' => '',
