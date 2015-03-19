@@ -9,9 +9,9 @@ class ServiceFactory
     private $loadedClasses = [];
     private $configuration;
     private $mainServices = [
-        'routing' => 
+        'url' => 
             [
-                'class' => 'Services\Routing\Routing',
+                'class' => 'System\URL\URL',
                 'arguments' => [], // @service; $configProperty
                 'prototype' => false
             ],
@@ -24,6 +24,12 @@ class ServiceFactory
         'crud' => 
             [
                 'class' => 'Simplon\Mysql\Crud\SqlCrudManager',
+                'arguments' => ['@db'], // @service; $configProperty
+                'prototype' => false
+            ],
+        'authentication' => 
+            [
+                'class' => 'System\Authentication\Authentication',
                 'arguments' => ['@db'], // @service; $configProperty
                 'prototype' => false
             ]

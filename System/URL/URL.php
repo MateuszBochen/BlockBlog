@@ -1,8 +1,8 @@
 <?php
 
-namespace Services\Routing;
+namespace System\URL;
 
-class Routing
+class URL
 {
     private $applicatopnPath;
     private $urlParams;

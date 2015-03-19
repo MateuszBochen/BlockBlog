@@ -19,13 +19,13 @@ class Kernel
 
         $serviceFactory = new ServiceFactory($configuration);
 
-        $routing = $serviceFactory->getService('routing');
+        $url = $serviceFactory->getService('url');
 
-        if ($routing->getUrlParam(0) == $configuration->getParam('adminDir')) {
-            $appLauncher = new AppLauncher\AdminAppLauncher($routing, $configuration);
+        if ($url->getUrlParam(0) == $configuration->getParam('adminDir')) {
+            $appLauncher = new AppLauncher\AdminAppLauncher($url, $configuration);
         }
         else {
-            $appLauncher = new AppLauncher\UserAppLauncher($routing, $configuration);
+            $appLauncher = new AppLauncher\UserAppLauncher($url, $configuration);
         }
     }
 }
