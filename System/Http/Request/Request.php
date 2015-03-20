@@ -1,8 +1,8 @@
 <?php
 
-namespace System\URL;
+namespace System\Http\Request;
 
-class URL
+class Request
 {
     private $applicatopnPath;
     private $urlParams;

@@ -9,9 +9,9 @@ class ServiceFactory
     private $loadedClasses = [];
     private $configuration;
     private $mainServices = [
-        'url' => 
+        'request' => 
             [
-                'class' => 'System\URL\URL',
+                'class' => 'System\Http\Request\Request',
                 'arguments' => [], // @service; $configProperty
                 'prototype' => false
             ],
