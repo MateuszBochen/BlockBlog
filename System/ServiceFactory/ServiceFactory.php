@@ -18,19 +18,25 @@ class ServiceFactory
         'db' => 
             [
                 'class' => 'Simplon\Mysql\Mysql',
-                'arguments' => ['$mysql.host', '$mysql.user', '$mysql.password', '$mysql.databaseName'], // @service; $configProperty
+                'arguments' => ['$mysql.host', '$mysql.user', '$mysql.password', '$mysql.databaseName'],
                 'prototype' => false
             ],
         'crud' => 
             [
                 'class' => 'Simplon\Mysql\Crud\SqlCrudManager',
-                'arguments' => ['@db'], // @service; $configProperty
+                'arguments' => ['@db'],
+                'prototype' => false
+            ],
+        'session' => 
+            [
+                'class' => 'System\Http\Session\Session',
+                'arguments' => [],
                 'prototype' => false
             ],
         'authentication' => 
             [
                 'class' => 'System\Authentication\Authentication',
-                'arguments' => ['@db'], // @service; $configProperty
+                'arguments' => ['@db', '@request', '@session'],
                 'prototype' => false
             ]
         ];

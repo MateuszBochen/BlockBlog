@@ -46,10 +46,6 @@ class Request
                 return '';
             }
 
-            if (!is_array($lastValue[$index])) {
-                return $lastValue[$index];
-            }
-
             $lastValue = $lastValue[$index];
         }
 
