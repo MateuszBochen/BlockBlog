@@ -6,7 +6,7 @@ class Session
 {
     private $sessionId;
     private $session = [];
-    
+
     public function __construct()
     {
         if (session_status() == PHP_SESSION_NONE) {
@@ -16,14 +16,14 @@ class Session
         $this->sessionId = session_id();
         $this->session = $_SESSION;
     }
-    
+
     public function __destruct()
     {
         $_SESSION = $this->session;
     }
 
     public function set($name, $value)
-    {       
+    {
         $var = &$this->getFromArray($name);
 
         $var = $value;

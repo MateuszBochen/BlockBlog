@@ -4,11 +4,12 @@ namespace System\Authentication;
 
 class Authentication
 {
-    private $db;
     private $request;
-
-    public function __construct($db, $request)
+    private $session;
+    private $userManager;
+    
+    public function __construct($request, $session)
     {
-
+            
     }
 }

@@ -36,7 +36,13 @@ class ServiceFactory
         'authentication' => 
             [
                 'class' => 'System\Authentication\Authentication',
-                'arguments' => ['@db', '@request', '@session'],
+                'arguments' => ['@request', '@session', '@user.manager'],
+                'prototype' => false
+            ],
+        'user.manager' => 
+            [
+                'class' => 'System\User\UserManager',
+                'arguments' => ['@crud'],
                 'prototype' => false
             ]
         ];
