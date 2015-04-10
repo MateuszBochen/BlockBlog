@@ -3,10 +3,12 @@
         'main' => [],
         'adminDir' => 'admin',
         'mysql' => [
-            'host' => '',
+            'host' => 'localhost',
             'user' => '',
             'password' => '',
             'port' => '',
             'databaseName' => '',
+            'prefix' => '',
+            'charset' => 'utf8'
         ]
     ];

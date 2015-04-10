@@ -2,18 +2,18 @@
 
 namespace System\User\UserEntity;
 
-use Simplon\Mysql\Crud\SqlCrudVo;
-use System\User\UserEnum\Rangs;
 
-class UserEntity extends SqlCrudVo
+
+
+class MainUser
 {
-    private $id;
-    private $userName;
-    private $password;
-    private $eMail;
-    private $createdAt;
-    private $range;
-    
+    protected $id;
+    protected $userName;
+    protected $password;
+    protected $eMail;
+    protected $createdAt;
+    protected $range;
+
     public function __construct()
     {
         $this->createdAt = time();
@@ -21,7 +21,14 @@ class UserEntity extends SqlCrudVo
 
     public function setUserName($userName)
     {
-        $this->userName = $userName;
+        $this->setId = $userName;
+        
+        return $this;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
         
         return $this;
     }

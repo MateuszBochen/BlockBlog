@@ -17,13 +17,13 @@ class ServiceFactory
             ],
         'db' => 
             [
-                'class' => 'Simplon\Mysql\Mysql',
-                'arguments' => ['$mysql.host', '$mysql.user', '$mysql.password', '$mysql.databaseName'],
+                'class' => 'BlockBlog\Mysql',
+                'arguments' => ['$mysql'],
                 'prototype' => false
             ],
-        'crud' => 
+        'orm' => 
             [
-                'class' => 'Simplon\Mysql\Crud\SqlCrudManager',
+                'class' => 'BlockBlog\ORM',
                 'arguments' => ['@db'],
                 'prototype' => false
             ],
@@ -42,7 +42,7 @@ class ServiceFactory
         'user.manager' => 
             [
                 'class' => 'System\User\UserManager',
-                'arguments' => ['@crud'],
+                'arguments' => ['@orm'],
                 'prototype' => false
             ]
         ];

@@ -27,6 +27,5 @@ class Kernel
         else {
             $appLauncher = new AppLauncher\UserAppLauncher($request, $configuration);
         }
-
     }
 }
