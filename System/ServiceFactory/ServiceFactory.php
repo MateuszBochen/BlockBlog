@@ -15,6 +15,12 @@ class ServiceFactory
                 'arguments' => [], // @service; $configProperty
                 'prototype' => false
             ],
+        'response' => 
+            [
+                'class' => 'System\Http\Response\Response',
+                'arguments' => [],
+                'prototype' => false
+            ],
         'db' => 
             [
                 'class' => 'BlockBlog\Mysql',
@@ -26,7 +32,7 @@ class ServiceFactory
                 'class' => 'BlockBlog\ORM',
                 'arguments' => ['@db'],
                 'prototype' => false
-            ],
+            ],        
         'session' => 
             [
                 'class' => 'System\Http\Session\Session',
@@ -43,6 +49,12 @@ class ServiceFactory
             [
                 'class' => 'System\User\UserManager',
                 'arguments' => ['@orm'],
+                'prototype' => false
+            ],
+        'render' => 
+            [
+                'class' => 'System\Render\Render',
+                'arguments' => ['$cacheDir', '$render'],
                 'prototype' => false
             ]
         ];

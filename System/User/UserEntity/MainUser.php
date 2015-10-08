@@ -2,9 +2,6 @@
 
 namespace System\User\UserEntity;
 
-
-
-
 class MainUser
 {
     protected $id;
@@ -13,10 +10,13 @@ class MainUser
     protected $eMail;
     protected $createdAt;
     protected $range;
+    protected $userToken;
 
     public function __construct()
     {
-        $this->createdAt = time();
+        if (!$this->createdAt) {
+            $this->createdAt = time();
+        }
     }
 
     public function setUserName($userName)
@@ -61,6 +61,13 @@ class MainUser
         return $this;
     }
 
+    public function setUserToken($userToken)
+    {
+        $this->userToken = $userToken;
+        
+        return $this;
+    }
+
     public function getId()
     {
         return $this->id;
@@ -89,5 +96,10 @@ class MainUser
     public function getRange()
     {
         $this->range;
+    }
+
+    public function getUserToken()
+    {
+        $this->userToken;
     }
 }

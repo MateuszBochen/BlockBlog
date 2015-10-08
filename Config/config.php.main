@@ -1,14 +1,19 @@
 <?php
     return [
         'main' => [],
+        'cacheDir' => 'false',
         'adminDir' => 'admin',
         'mysql' => [
-            'host' => 'localhost',
+            'host' => '',
             'user' => '',
             'password' => '',
             'port' => '',
-            'databaseName' => '',
+            'databaseName' => 'blockblog',
             'prefix' => '',
             'charset' => 'utf8'
+        ],
+        'render' => [
+            'cacheDir' => 'atline',
+            'cachedRender' => false
         ]
     ];

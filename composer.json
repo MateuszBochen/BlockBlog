@@ -10,10 +10,15 @@
         {
             "type": "vcs",
             "url": "https://github.com/MateuszBochen/PHPOrm"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/requtize/atline"
         }
     ],
     "require": {
         "blockblog/drivers/mysql": "dev-master",
+        "atline/atline": "dev-master",
         "php": ">=5.5",
         "ext-pdo": "*"
     }

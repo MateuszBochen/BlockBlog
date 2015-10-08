@@ -6,38 +6,39 @@ use System\User\UserEntity\MainUser;
 
 class UserManager
 {
-    private $userArray = [];
-    private $crud;
+    private $orm;
+    private $userRepository;
 
-    public function __construct($crud)
+    public function __construct($orm)
     {
-        $this->crud = $crud;
+        $this->orm = $orm;
+
+        $this->userRepository = $this->orm->getRepository('System\User\UserEntity\MainUser');
     }
 
     public function getUserBy($id)
     {
-        if (isset($this->userArray[$id])) {
-            return $this->userArray[$id];
-        }
+        
 
-        $user = $this->crud->read(new MainUser(), ['id' => $id]);
+        //$user = $this->crud->read(new MainUser(), ['id' => $id]);
 
         return $this->userArray[$user->getId()] = $user;
+    }
+
+    public function getUserByToken($token)
+    {
+        return $this->userRepository->findOneBy(['userToken' => $token]);
     }
     
     public function createUser($userName, $password, $eMail, $range)
     {
         $user = new MainUser();
-        $user->setUserName($userName);
-        $user->setPassword($this->passwordHash($password,  $user->getCreatedAt()));
-        $user->setEMail($eMail);
-        $user->setRange($range);
-        $user->setRange($range);
-        $user->setId(null);
+        
+    }
 
-        $user = $this->crud->create($user);
-
-        return $user;
+    public function getUserByLogin($login, $password)
+    {
+        return $this->userRepository->findOneBy(['userName' => $login]);
     }
     
     public function passwordHash($password, $createdAt)

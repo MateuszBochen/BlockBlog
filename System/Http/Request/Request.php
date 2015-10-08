@@ -8,14 +8,26 @@ class Request
     private $urlParams;
     private $myPost = [];
     private $myGet = [];
+    private $currentUrl;
 
     public function __construct()
     {
-        $this->applicatopnPath = '/'.implode(explode('/', $_SERVER['PHP_SELF'], -1));
-        $this->urlParams = explode('/', trim(str_replace($this->applicatopnPath, '', $_SERVER['REDIRECT_URL']), '/'));
+        $this->applicatopnPath = implode('/', explode('/', $_SERVER['PHP_SELF'], -1));
+
+        //print_r($_SERVER); exit();
+
+        $string = str_replace($this->applicatopnPath, '', (isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : ''));
+
+        $this->currentUrl = trim($string, '/');
+        $this->urlParams = explode('/', $this->currentUrl);
 
         $this->myPost = $_POST;
         $this->myGet = $_GET;
+    }
+
+    public function getCurrentUrl()
+    {
+        return $this->currentUrl;
     }
 
     public function getUrlParam($index)
@@ -34,6 +46,15 @@ class Request
     public function get($name)
     {
         return $this->getFromArray($name, $this->myGet);
+    }
+
+    public function getServerValue($name)
+    {
+        if (isset($_SERVER[$name])) {
+            return $_SERVER[$name];
+        }
+
+        return null;
     }
 
     private function getFromArray($index, &$array)
