@@ -2,7 +2,7 @@
 
 namespace System\Render;
 
-use Atline\DefinitionResolver;
+use Atline\Atline\DefinitionResolver;
 
 class AdminResolver extends DefinitionResolver
 {

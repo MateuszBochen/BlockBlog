@@ -6,9 +6,6 @@ use System\Configuration\Configuration;
 use System\ServiceFactory\ServiceFactory;
 use System\AppLauncher;
 
-
- echo '<pre>';
-
 class Kernel
 {
 

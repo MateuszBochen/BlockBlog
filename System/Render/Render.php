@@ -2,8 +2,8 @@
 
 namespace System\Render;
 
-use Atline\Engine;
-use Atline\Environment;
+use Atline\Atline\Engine;
+
 
 class Render
 {
@@ -13,7 +13,7 @@ class Render
     {
         $cacheDir = ROOT_DIR.'/'.$cacheDir.'/'.$render['cacheDir'];
 
-        $this->atLine = new Engine($cacheDir, new Environment());
+        $this->atLine = new Engine($cacheDir, new AdminEnvironment());
         $this->atLine->setCached($render['cachedRender']);
     }
 
