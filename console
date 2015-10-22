@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+
+define('ROOT_DIR', realpath(dirname(__FILE__).'/'));
+
+include (ROOT_DIR.'/System/Autoloader/Autoloader.php');
+include (ROOT_DIR.'/vendor/autoload.php');
+
+
+
+
+echo 'OK';
+
+echo "\n";

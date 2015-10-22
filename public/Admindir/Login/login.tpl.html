@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>BlockBlog CMS</title>
+
+         {{ setCss('css/foundation.css') }}
+         {{ setJs('js/foundation.min.js') }}
+
+    </head>
+    <body>
+        <div class="row">
+            <div class="small-6 large-centered columns">
+                <form action="{{ path('admin/authenticate') }}" method="post">
+                  <fieldset>
+                    <legend>BlockBlog Admin</legend>
+
+                    <div class="row collapse">
+                        <div class="small-3 columns">
+                            <span class="prefix">{{ t('login') }}:</span>
+                        </div>
+                        <div class="small-9 columns">
+                            <input type="text" name="login" />
+                        </div>
+                    </div>
+                    <div class="row collapse">
+                        <div class="small-3 columns">
+                            <span class="prefix">{{ t('password') }}:</span>
+                        </div>
+                        <div class="small-9 columns">
+                            <input type="password" name="password" />
+                        </div>
+                    </div>
+                    <div class="row collapse">                        
+                        <div class="small-12 columns">
+                            <input type="submit" class="button success right" value="{{ t('login_in') }}" />
+                        </div>
+                    </div>
+                  </fieldset>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

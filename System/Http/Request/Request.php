@@ -14,7 +14,7 @@ class Request
     {
         $this->applicatopnPath = implode('/', explode('/', $_SERVER['PHP_SELF'], -1));
 
-        //print_r($_SERVER); exit();
+        //print_r($this->applicatopnPath); exit();
 
         $string = str_replace($this->applicatopnPath, '', (isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : ''));
 
@@ -55,6 +55,11 @@ class Request
         }
 
         return null;
+    }
+
+    public function getApplicatopnPath()
+    {
+        return $this->applicatopnPath;
     }
 
     private function getFromArray($index, &$array)

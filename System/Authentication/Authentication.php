@@ -8,7 +8,7 @@ class Authentication
     private $session;
     private $userManager;
     
-    private $userToken;
+    private $userLogin;
     private $authenticationToken;
 
     public function __construct($request, $session, $userManager)
@@ -18,12 +18,16 @@ class Authentication
         $this->userManager = $userManager;
         
         $this->authenticationToken = $this->session->get('authentication.token');
-        $this->userToken = $this->session->get('user.token');
+        $this->userLogin = $this->session->get('user.login');
     }
 
     public function isAuthorize()
     {
-        $user = $this->userManager->getUserByToken($this->userToken);
+        $user = $this->userManager->getUserByLogin($this->userLogin);
+
+        if ($user == false) {
+            return false;
+        }
 
         $token = $this->createAuthenticationToken($user);
 
@@ -37,8 +41,13 @@ class Authentication
     public function authorize($login, $password)
     {
         $user = $this->userManager->getUserByLogin($login);
-        $password = $this->userManager->passwordHash($password, $user->getCreatedAt());
 
+        if ($user == false) {
+            return false;
+        }
+
+        $password = $this->userManager->passwordHash($password, $user->getCreatedAt());
+        
         if ($password != $user->getPassword()) {
             return false;
         }
@@ -46,7 +55,7 @@ class Authentication
         $newToken = $this->createAuthenticationToken($user);
 
         $this->session->set('authentication.token', $newToken);
-        $this->session->set('user.token', $user->getUserToken());
+        $this->session->set('user.login', $login);
 
         return $user->getUserToken();
     }

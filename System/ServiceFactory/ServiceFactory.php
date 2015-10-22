@@ -54,7 +54,13 @@ class ServiceFactory
         'render' => 
             [
                 'class' => 'System\Render\Render',
-                'arguments' => ['$cacheDir', '$render'],
+                'arguments' => ['$cacheDir', '$render', '@render.admin.environment'],
+                'prototype' => false
+            ],
+        'render.admin.environment' => 
+            [
+                'class' => 'System\Render\AdminEnvironment',
+                'arguments' => ['@request'],
                 'prototype' => false
             ]
         ];

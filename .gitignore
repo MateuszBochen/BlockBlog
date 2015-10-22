@@ -1,3 +1,4 @@
 /Config/config.php
 /vendor/*
 /composer.lock
+/cache

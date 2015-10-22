@@ -8,13 +8,19 @@ use Atline\Atline\Engine;
 class Render
 {
     private $atLine;
+    private $cacheDir;
+    private $configs;
 
-    public function __construct($cacheDir, $render)
+    public function __construct($cacheDir, $configs)
     {
-        $cacheDir = ROOT_DIR.'/'.$cacheDir.'/'.$render['cacheDir'];
+        $this->configs = $configs;
+        $this->cacheDir = ROOT_DIR.'/'.$cacheDir.'/'.$configs['cacheDir'];
+    }
 
-        $this->atLine = new Engine($cacheDir, new AdminEnvironment());
-        $this->atLine->setCached($render['cachedRender']);
+    public function setEnvironment($adminEnvironment)
+    {
+        $this->atLine = new Engine($this->cacheDir, $adminEnvironment);
+        $this->atLine->setCached($this->configs['cachedRender']);
     }
 
     public function setDefinitionResolver($definitionResolver)

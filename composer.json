@@ -14,11 +14,16 @@
         {
             "type": "vcs",
             "url": "https://github.com/requtize/atline"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/requtize/assetter"
         }
     ],
     "require": {
         "blockblog/drivers/mysql": "dev-master",
         "atline/atline": "0.1.*",
+        "assetter/assetter": "0.1.*",
         "php": ">=5.5",
         "ext-pdo": "*"
     }
