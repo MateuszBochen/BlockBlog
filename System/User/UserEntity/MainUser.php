@@ -21,7 +21,7 @@ class MainUser
 
     public function setUserName($userName)
     {
-        $this->setId = $userName;
+        $this->userName = $userName;
         
         return $this;
     }

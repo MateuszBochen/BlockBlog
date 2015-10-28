@@ -34,12 +34,15 @@ class Kernel
         //exit;
 
         //$db = $serviceFactory->getService('db');
+        //$um = $serviceFactory->getService('user.manager');
         //$atline = $serviceFactory->getService('atline');
         
-
+        //$um->createUser('backen', 'nblc08gx', 'meoun@o2.pl', 100);
         //var_dump($db->query("SELECT * FROM main_users") instanceof  \BlockBlog\Mysql);
 
-       /* $db->insert('main_users', [['password' => 1, 'user_name' => 'ala', 'range' => 100], ['password' => 2, 'user_name' => 'ala2', 'range' => 40]]);
+
+
+        /* $db->insert('main_users', [['password' => 'nblc08gx', 'user_name' => 'backen', 'range' => 100]]);
         print_r($db->lastId());*/
         
         /*$user = new \System\User\UserEntity\MainUser();

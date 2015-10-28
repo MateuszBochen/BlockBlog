@@ -30,6 +30,13 @@ class UserManager
     public function createUser($userName, $password, $eMail, $range)
     {
         $user = new MainUser();
+        $user->setUserName($userName)
+            ->setPassword($this->passwordHash($password, $user->getCreatedAt()))
+            ->setEMail($eMail)
+            ->getRange($range);
+
+        $this->orm->add($user);
+        $this->orm->save();
     }
 
     public function getUserByLogin($login)

@@ -6,9 +6,9 @@ class AdminAppLauncher
 {
     private $serviceFactory;
     private $configuration;
-    private $adminRouting;    
-    private $loginUrl = '/login';
-    private $authenticateUrl = '/authenticate';
+    private $adminRouting;
+    private $loginUrl = 'login';
+    private $authenticateUrl = 'authenticate';
     private $render;
 
     public function __construct($serviceFactory, $configuration)
@@ -16,38 +16,35 @@ class AdminAppLauncher
         $this->serviceFactory = $serviceFactory;
         $this->configuration = $configuration;
 
-        $resolver = new \System\Render\AdminResolver();
-
-        $this->render = $this->serviceFactory->getService('render');
-        $this->render->setEnvironment($this->serviceFactory->getService('render.admin.environment'));
-        $this->render->setDefinitionResolver($resolver);
-
         $request = $serviceFactory->getService('request');
         $currentUrl = $request->getCurrentUrl();
 
-        $this->loginUrl = $configuration->getParam('adminDir').$this->loginUrl;
-        $this->authenticateUrl = $configuration->getParam('adminDir').$this->authenticateUrl;
+        //$this->loginUrl = $configuration->getParam('adminDir').$this->loginUrl;
+        //$this->authenticateUrl = $configuration->getParam('adminDir').$this->authenticateUrl;
 
         $authentication = $serviceFactory->getService('authentication');
         $isAuthorized = $authentication->isAuthorize();
 
-        if ($currentUrl == $this->authenticateUrl) {           
+        $currentUrl = $this->clearCurrentUrlFromAdminDir($currentUrl);
 
-            if ($authentication->authorize($request->post('login'), $request->post('password'))) {
+        $app = $this->getAppFromRouting($currentUrl);
 
-            }
-            else {
-                $serviceFactory->getService('response')->redirect($this->loginUrl);
-            }
+        if ($currentUrl != $this->authenticateUrl && $currentUrl != $this->loginUrl && $isAuthorized == false) {
+            $serviceFactory->getService('response')->redirect($configuration->getParam('adminDir').'/'.$this->loginUrl);
         }
-        elseif ($currentUrl != $this->loginUrl && $isAuthorized == false) {
-            $serviceFactory->getService('response')->redirect($this->loginUrl);
-        }
-        elseif($currentUrl == $this->loginUrl) {
-            $authentication->unAuthorize();
 
-            echo $this->render->single('Login/login', []);
-        }
+        $app->init();
+    }
+
+    private function getAppFromRouting($url) 
+    {
+        $routeClass = new \System\AppLauncher\Admin\Routing();
+        return $routeClass->getApp($url, $this->serviceFactory, $this->configuration);
+    }
+
+    private function clearCurrentUrlFromAdminDir($url)
+    {
+        return trim(str_replace($this->configuration->getParam('adminDir'), '', $url), '/');
     }
 
 }

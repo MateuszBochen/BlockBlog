@@ -7,10 +7,12 @@ use Atline\Atline\Environment;
 class AdminEnvironment extends Environment
 {
     private $request;
+    private $notifications;
 
-    public function __construct($request)
+    public function __construct($request, $notifications)
     {
         $this->request = $request;
+        $this->notifications = $notifications;
     }
 
     public function setCss($path)
@@ -26,6 +28,11 @@ class AdminEnvironment extends Environment
     public function path($path)
     {
         return $this->request->getApplicatopnPath().'/'.$path;
+    }
+
+    public function getErrors()
+    {
+        //print_r($this->notifications->getByType('error'));        
     }
 
     // TODO

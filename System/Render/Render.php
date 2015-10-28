@@ -33,7 +33,7 @@ class Render
 
     public function single($template, $data)
     {
-        return $this->atLine->render($template, $data);
+        echo $this->atLine->render($template, $data);
     }
     
 }

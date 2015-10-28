@@ -13,13 +13,18 @@ class Session
             session_start();
         }
 
+        echo "Session START\n";
+
         $this->sessionId = session_id();
         $this->session = $_SESSION;
+
+        //print_r($_SESSION);
     }
 
     public function __destruct()
     {
         $_SESSION = $this->session;
+        echo "Session END\n";
     }
 
     public function set($name, $value)

@@ -32,11 +32,17 @@ class ServiceFactory
                 'class' => 'BlockBlog\ORM',
                 'arguments' => ['@db'],
                 'prototype' => false
-            ],        
+            ],
         'session' => 
             [
                 'class' => 'System\Http\Session\Session',
                 'arguments' => [],
+                'prototype' => false
+            ],
+        'notifications' => 
+            [
+                'class' => 'System\Http\Session\Notifications',
+                'arguments' => ['@session'],
                 'prototype' => false
             ],
         'authentication' => 
@@ -54,13 +60,13 @@ class ServiceFactory
         'render' => 
             [
                 'class' => 'System\Render\Render',
-                'arguments' => ['$cacheDir', '$render', '@render.admin.environment'],
+                'arguments' => ['$cacheDir', '$render'],
                 'prototype' => false
             ],
         'render.admin.environment' => 
             [
                 'class' => 'System\Render\AdminEnvironment',
-                'arguments' => ['@request'],
+                'arguments' => ['@request', '@notifications'],
                 'prototype' => false
             ]
         ];
@@ -108,8 +114,8 @@ class ServiceFactory
             throw new ServiceFactoryException('Class '.$service['class'].' does not exist');
         }
 
-        $reflection = new \ReflectionClass($service['class']); 
-        $myClassInstance = $reflection->newInstanceArgs($argumentsArray); 
+        $reflection = new \ReflectionClass($service['class']);
+        $myClassInstance = $reflection->newInstanceArgs($argumentsArray);
 
         $this->loadedClasses[$serviceName] = $myClassInstance;
 

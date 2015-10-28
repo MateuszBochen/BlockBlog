@@ -9,6 +9,9 @@
 
     </head>
     <body>
+
+    {{ getErrors() }}
+
         <div class="row">
             <div class="small-6 large-centered columns">
                 <form action="{{ path('admin/authenticate') }}" method="post">
