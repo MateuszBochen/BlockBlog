@@ -16,7 +16,7 @@ class Response
     {
         $url = trim($url, '/');
         header("Location: ".$this->applicatopnPath.'/'.$url, true, 301);
-        exit;
+        //die();
     }
 
 }

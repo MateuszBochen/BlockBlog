@@ -32,7 +32,7 @@ class AdminEnvironment extends Environment
 
     public function getErrors()
     {
-        //print_r($this->notifications->getByType('error'));        
+        return $this->notifications->getByType('error');
     }
 
     // TODO

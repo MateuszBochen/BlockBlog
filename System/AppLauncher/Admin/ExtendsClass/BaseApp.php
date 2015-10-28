@@ -19,8 +19,10 @@ class BaseApp implements BaseInterface
 
         $resolver = new \System\Render\AdminResolver();
 
+        $r = $this->serviceFactory->getService('render.admin.environment');
+
         $this->render = $this->serviceFactory->getService('render');
-        $this->render->setEnvironment($this->serviceFactory->getService('render.admin.environment'));
+        $this->render->setEnvironment($r);
         $this->render->setDefinitionResolver($resolver);
 
     }
@@ -33,5 +35,5 @@ class BaseApp implements BaseInterface
     protected function getParam($name)
     {
         return $this->configuration->getParam($name);
-    }   
+    }
 }

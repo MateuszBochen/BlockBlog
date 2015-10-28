@@ -30,10 +30,14 @@ class Render
         return $this; 
     }
 
-
     public function single($template, $data)
     {
         echo $this->atLine->render($template, $data);
     }
-    
+
+    public function base($template, $data)
+    {
+        $this->atLine->setDefaultExtends('base');
+        echo $this->atLine->render($template, $data);
+    }
 }

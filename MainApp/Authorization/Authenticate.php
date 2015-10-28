@@ -14,11 +14,12 @@ class Authenticate extends BaseApp
         $request = $this->get('request');
         $notifications = $this->get('notifications');
 
+
         if ($authentication->authorize($request->post('login'), $request->post('password'))) {
-            $serviceFactory->getService('response')->redirect($this->getParam('adminDir').'/');
+            $this->get('response')->redirect($this->getParam('adminDir').'/');
         }
         else {
-            $notifications->add('Your login or passwors is incorrect', 'error');  
+            $notifications->add('Your login or passwors is incorrect', 'error');
             $this->get('response')->redirect($this->getParam('adminDir').'/'.$this->loginUrl);
         }
     }

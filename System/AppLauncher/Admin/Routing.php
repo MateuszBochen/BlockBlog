@@ -9,6 +9,7 @@ class Routing
      * array of routing ['url' => 'className']
      */
     private $routeArray = [
+        '' => 'MainApp\\HomeApp\\Home',
         'login' => 'MainApp\\Authorization\\Login',
         'authenticate' => 'MainApp\\Authorization\\Authenticate',
     ];

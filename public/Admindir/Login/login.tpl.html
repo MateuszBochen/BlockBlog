@@ -3,20 +3,33 @@
     <head>
         <meta charset="UTF-8">
         <title>BlockBlog CMS</title>
-
-         {{ setCss('css/foundation.css') }}
-         {{ setJs('js/foundation.min.js') }}
-
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        {{ setCss('css/foundation.css') }}
+        {{ setJs('js/foundation.min.js') }}
+        {{ setJs('js/foundation/foundation.alert.js') }}
     </head>
     <body>
 
-    {{ getErrors() }}
+
+
 
         <div class="row">
             <div class="small-6 large-centered columns">
+
                 <form action="{{ path('admin/authenticate') }}" method="post">
                   <fieldset>
                     <legend>BlockBlog Admin</legend>
+
+                    <div class="row">
+                        <div class="small-12 large-centered columns">
+                            @foreach $env->getErrors()
+                                <div data-alert class="alert-box alert radius">
+                                    {{ $item }}
+                                    <a href="#" class="close">&times;</a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
 
                     <div class="row collapse">
                         <div class="small-3 columns">

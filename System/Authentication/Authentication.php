@@ -47,7 +47,7 @@ class Authentication
         }
 
         $password = $this->userManager->passwordHash($password, $user->getCreatedAt());
-        
+
         if ($password != $user->getPassword()) {
             return false;
         }
@@ -57,7 +57,7 @@ class Authentication
         $this->session->set('authentication.token', $newToken);
         $this->session->set('user.login', $login);
 
-        return $user->getUserToken();
+        return true;
     }
 
     public function unAuthorize()

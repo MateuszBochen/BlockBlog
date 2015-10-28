@@ -1,0 +1,19 @@
+@section('main')
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>BlockBlog CMS</title>
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        {{ setCss('css/foundation.css') }}
+        {{ setJs('js/foundation.min.js') }}
+        {{ setJs('js/foundation/foundation.alert.js') }}
+    </head>
+    <body>
+
+        @show('content')
+
+
+    </body>
+</html>
+@endsection
