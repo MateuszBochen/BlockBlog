@@ -33,6 +33,10 @@ class AdminAppLauncher
             $serviceFactory->getService('response')->redirect($configuration->getParam('adminDir').'/'.$this->loginUrl);
         }
 
+        if (!method_exists ($app, 'init')) {
+            throw new AppLauncherException('Method <b>init()</b> does not exist in <b>'.get_class($app).'</b>');
+        }
+
         $app->init();
     }
 
@@ -46,5 +50,4 @@ class AdminAppLauncher
     {
         return trim(str_replace($this->configuration->getParam('adminDir'), '', $url), '/');
     }
-
 }

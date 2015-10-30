@@ -48,13 +48,19 @@ class ServiceFactory
         'authentication' => 
             [
                 'class' => 'System\Authentication\Authentication',
-                'arguments' => ['@request', '@session', '@user.manager'],
+                'arguments' => ['@request', '@session', '@user.manager', '@user.active'],
                 'prototype' => false
             ],
         'user.manager' => 
             [
                 'class' => 'System\User\UserManager',
                 'arguments' => ['@orm'],
+                'prototype' => false
+            ],
+        'user.active' => 
+            [
+                'class' => 'System\User\ActiveUser',
+                'arguments' => [],
                 'prototype' => false
             ],
         'render' => 
@@ -66,7 +72,7 @@ class ServiceFactory
         'render.admin.environment' => 
             [
                 'class' => 'System\Render\AdminEnvironment',
-                'arguments' => ['@request', '@notifications'],
+                'arguments' => ['@request', '@notifications', '@user.active', '$adminDir'],
                 'prototype' => false
             ]
         ];

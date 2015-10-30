@@ -11,7 +11,9 @@ class Routing
     private $routeArray = [
         '' => 'MainApp\\HomeApp\\Home',
         'login' => 'MainApp\\Authorization\\Login',
+        'logout' => 'MainApp\\Authorization\\Logout',
         'authenticate' => 'MainApp\\Authorization\\Authenticate',
+        'pages/create' => 'MainApp\\Pages\\Create',
     ];
 
     public function __construct()
@@ -24,7 +26,9 @@ class Routing
         $className = '';
 
         foreach ($this->routeArray as $index => $class) {
-            if (preg_match("/^{$index}/i", $url)) {
+            $index = str_replace('/', '\/', $index);
+
+            if (preg_match("/^{$index}$/i", $url)) {
                 $className = $class;
                 break;
             }

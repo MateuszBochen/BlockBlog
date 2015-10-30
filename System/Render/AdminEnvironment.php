@@ -8,11 +8,18 @@ class AdminEnvironment extends Environment
 {
     private $request;
     private $notifications;
+    private $admindir;
+    private $user;
 
-    public function __construct($request, $notifications)
+    public $appName;
+    public $appSubName;
+
+    public function __construct($request, $notifications, $user, $admindir)
     {
         $this->request = $request;
         $this->notifications = $notifications;
+        $this->admindir = $admindir;
+        $this->user = $user->getUser();
     }
 
     public function setCss($path)
@@ -33,6 +40,18 @@ class AdminEnvironment extends Environment
     public function getErrors()
     {
         return $this->notifications->getByType('error');
+    }
+
+    public function url($url)
+    {
+        return $this->request->getApplicatopnPath().'/'.$this->admindir.'/'.trim($url, '/');
+    }
+
+    public function user($prop)
+    {
+        $function = 'get'.ucfirst($prop);
+
+        return $this->user->$function();
     }
 
     // TODO

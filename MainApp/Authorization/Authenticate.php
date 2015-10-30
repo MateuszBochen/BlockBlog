@@ -4,16 +4,13 @@ namespace MainApp\Authorization;
 
 use System\AppLauncher\Admin\ExtendsClass\BaseApp;
 
-class Authenticate extends BaseApp
+class Authenticate extends Base
 {
-    private $loginUrl = 'login';
-
     public function init()
     {
         $authentication = $this->get('authentication');
         $request = $this->get('request');
         $notifications = $this->get('notifications');
-
 
         if ($authentication->authorize($request->post('login'), $request->post('password'))) {
             $this->get('response')->redirect($this->getParam('adminDir').'/');

@@ -7,15 +7,17 @@ class Authentication
     private $request;
     private $session;
     private $userManager;
+    private $activeUser;
     
     private $userLogin;
     private $authenticationToken;
 
-    public function __construct($request, $session, $userManager)
+    public function __construct($request, $session, $userManager, $activeUser)
     {
         $this->request = $request;
         $this->session = $session;
         $this->userManager = $userManager;
+        $this->activeUser = $activeUser;
         
         $this->authenticationToken = $this->session->get('authentication.token');
         $this->userLogin = $this->session->get('user.login');
@@ -32,6 +34,7 @@ class Authentication
         $token = $this->createAuthenticationToken($user);
 
         if ($token == $this->authenticationToken) {
+            $this->activeUser->setUser($user);
             return true;
         }
 
@@ -57,6 +60,8 @@ class Authentication
         $this->session->set('authentication.token', $newToken);
         $this->session->set('user.login', $login);
 
+        $this->activeUser->setUser($user);
+
         return true;
     }
 
@@ -64,6 +69,8 @@ class Authentication
     {
         $this->session->set('authentication.token', '');
         $this->session->set('user.token', '');
+
+        $this->activeUser->setUser(null);
     }
 
     private function createAuthenticationToken($user)

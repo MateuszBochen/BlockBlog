@@ -14,8 +14,6 @@ class Request
     {
         $this->applicatopnPath = implode('/', explode('/', $_SERVER['PHP_SELF'], -1));
 
-        //print_r($this->applicatopnPath); exit();
-
         $string = str_replace($this->applicatopnPath, '', (isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : ''));
 
         $this->currentUrl = trim($string, '/');

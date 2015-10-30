@@ -10,7 +10,7 @@ class Kernel
 {
 
     public function init()
-    {   
+    {
         $appLauncher = null;
         $classLoader = new \System\Autoloader\Autoloader;
         $classLoader->register();
@@ -20,7 +20,6 @@ class Kernel
         $serviceFactory = new ServiceFactory($configuration);
 
         $request = $serviceFactory->getService('request');
-        //$authentication = $serviceFactory->getService('authentication');
 
         if ($request->getUrlParam(0) == $configuration->getParam('adminDir')) {
             $appLauncher = new AppLauncher\AdminAppLauncher($serviceFactory, $configuration);
