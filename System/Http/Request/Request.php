@@ -36,6 +36,11 @@ class Request
         return null;
     }
 
+    public function getUrlParams()
+    {
+        return $this->urlParams;
+    }
+
     public function post($name)
     {
         return $this->getFromArray($name, $this->myPost);

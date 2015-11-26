@@ -13,6 +13,9 @@
 
     <title>BlockBlog Admin</title>
 
+    <!-- jQuery -->
+    {{ setJs('js/jquery.js') }}
+
     <!-- Bootstrap Core CSS -->
     {{ setCss('css/bootstrap.css') }}
 
@@ -80,6 +83,7 @@
                     </li>
                     <li>
                         <a href="{{ url('pages/create') }}"><i class="fa fa-fw fa-file-o"></i> {{ t('create_new_page') }}</a>
+                        <a href="{{ url('pages/list') }}"><i class="fa fa-fw fa-th-list"></i> {{ t('show_pages') }}</a>
                     </li>
                 </ul>
             </div>
@@ -89,6 +93,24 @@
         <div id="page-wrapper">
 
             <div class="container-fluid">
+                 <div class="row">
+                    <div class="col-lg-12">
+                        @foreach $env->getErrors()
+                            <div class="alert alert-danger">
+                                {{ $item|raw }}
+                                <a href="#" class="close">&times;</a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="col-lg-12">
+                        @foreach $env->getSuccesses()
+                            <div class="alert alert-success">
+                                {{ $item|raw }}
+                                <a href="#" class="close">&times;</a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
 
                 <!-- Page Heading -->
                 <div class="row">
@@ -114,8 +136,7 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- jQuery -->
-    {{ setJs('js/jquery.js') }}
+    
     <!-- Bootstrap Core JavaScript -->
     {{ setJs('js/bootstrap.min.js') }}
 

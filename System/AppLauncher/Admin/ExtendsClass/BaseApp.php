@@ -19,8 +19,10 @@ class BaseApp implements BaseInterface
         $this->serviceFactory = $sf;
         $this->configuration = $configuration;
 
+        $className = get_class($this);
+
         $resolver = new \System\Render\AdminResolver();
-        $resolver->setClassName(get_class($this));
+        $resolver->setClassName($className);
 
         $environment = $this->serviceFactory->getService('render.admin.environment');
         $environment->appName = $this->appName;

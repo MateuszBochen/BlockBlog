@@ -42,6 +42,11 @@ class AdminEnvironment extends Environment
         return $this->notifications->getByType('error');
     }
 
+    public function getSuccesses()
+    {
+        return $this->notifications->getByType('success');
+    }
+
     public function url($url)
     {
         return $this->request->getApplicatopnPath().'/'.$this->admindir.'/'.trim($url, '/');

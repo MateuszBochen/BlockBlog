@@ -19,31 +19,31 @@ class AdminAppLauncher
         $request = $serviceFactory->getService('request');
         $currentUrl = $request->getCurrentUrl();
 
-        //$this->loginUrl = $configuration->getParam('adminDir').$this->loginUrl;
-        //$this->authenticateUrl = $configuration->getParam('adminDir').$this->authenticateUrl;
-
         $authentication = $serviceFactory->getService('authentication');
         $isAuthorized = $authentication->isAuthorize();
 
         $currentUrl = $this->clearCurrentUrlFromAdminDir($currentUrl);
 
-        $app = $this->getAppFromRouting($currentUrl);
+        $app = $this->getAppFromRouting($currentUrl, $request->getUrlParams());
 
         if ($currentUrl != $this->authenticateUrl && $currentUrl != $this->loginUrl && $isAuthorized == false) {
             $serviceFactory->getService('response')->redirect($configuration->getParam('adminDir').'/'.$this->loginUrl);
         }
 
-        if (!method_exists ($app, 'init')) {
-            throw new AppLauncherException('Method <b>init()</b> does not exist in <b>'.get_class($app).'</b>');
+        if ($app[0] === false) {
+            throw new AppLauncherException('Route <b>'.$currentUrl.'</b> does not exist ');
         }
 
-        $app->init();
+        call_user_func_array([$app[0], 'init'], $app[1]);
     }
 
-    private function getAppFromRouting($url) 
+    private function getAppFromRouting($url, $params) 
     {
-        $routeClass = new \System\AppLauncher\Admin\Routing();
-        return $routeClass->getApp($url, $this->serviceFactory, $this->configuration);
+        $routeClass = new \System\AppLauncher\Admin\Routing($params);
+        $app = $routeClass->getApp($url, $this->serviceFactory, $this->configuration);
+        $initValues = $routeClass->getIniValues();
+
+        return [$app, $initValues];
     }
 
     private function clearCurrentUrlFromAdminDir($url)

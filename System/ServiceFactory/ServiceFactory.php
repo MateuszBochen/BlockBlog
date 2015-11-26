@@ -15,6 +15,12 @@ class ServiceFactory
                 'arguments' => [], // @service; $configProperty
                 'prototype' => false
             ],
+        'form' => 
+            [
+                'class' => 'System\Http\Form\Form',
+                'arguments' => ['@request'],
+                'prototype' => false
+            ],
         'response' => 
             [
                 'class' => 'System\Http\Response\Response',
