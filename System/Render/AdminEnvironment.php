@@ -10,16 +10,25 @@ class AdminEnvironment extends Environment
     private $notifications;
     private $admindir;
     private $user;
+    private $appParams = [];
+    private $appMainUrl = '';
 
     public $appName;
     public $appSubName;
 
-    public function __construct($request, $notifications, $user, $admindir)
+    public function __construct($request, $notifications, $user, $admindir, $appParams, $appMainUrl)
     {
         $this->request = $request;
         $this->notifications = $notifications;
         $this->admindir = $admindir;
         $this->user = $user->getUser();
+        $this->appParams = $appParams;
+        $this->appMainUrl = $appMainUrl;
+    }
+
+    public function _setAppParams()
+    {
+
     }
 
     public function setCss($path)
@@ -50,6 +59,29 @@ class AdminEnvironment extends Environment
     public function url($url)
     {
         return $this->request->getApplicatopnPath().'/'.$this->admindir.'/'.trim($url, '/');
+    }
+
+    public function appUlr($params)
+    {
+        $params = array_merge($this->appParams, $params);
+        $paramUrl = [];
+
+        foreach ($params as $param => $value) {
+            $paramUrl[] = $param.'/'.$value;
+        }
+
+        return $this->request->getApplicatopnPath().'/'.$this->admindir.'/'.$this->appMainUrl.'/'.implode('/', $paramUrl);
+    }
+
+    public function pagination($allPages)
+    {
+        $html = '<ul class="pagination">';
+        for($i = 0; $i < $allPages; $i++) {
+            $html .= '<li><a href="'.$this->appUlr(['page' => $i]).'">'.($i+1).'</a></li>';
+        }
+        $html .= '</ul>';
+
+        return $html;
     }
 
     public function user($prop)

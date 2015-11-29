@@ -74,13 +74,13 @@ class ServiceFactory
                 'class' => 'System\Render\Render',
                 'arguments' => ['$cacheDir', '$render'],
                 'prototype' => false
-            ],
+            ]/*,
         'render.admin.environment' => 
             [
                 'class' => 'System\Render\AdminEnvironment',
                 'arguments' => ['@request', '@notifications', '@user.active', '$adminDir'],
                 'prototype' => false
-            ]
+            ]*/
         ];
 
     public function __construct($configuration)

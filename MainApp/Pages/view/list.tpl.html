@@ -1,0 +1,35 @@
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                {{ t('site_name') }}
+            </th>
+            <th style="width: 7%;">
+                {{ t('disabled') }}
+            </th>
+            <th style="width: 7%;">
+                {{ t('actions') }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach $pages
+            <tr>
+                <td>
+                    {{ $item->getPageName() }}
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    <a href="{{ $item->getId() }}">Edit</a>
+                    <a href="{{ $item->getId() }}">Delete</a>
+                </td>
+            </tr>
+        @endforeach
+
+    </tbody>
+</table>
+
+{{ pagination($allPages) }}

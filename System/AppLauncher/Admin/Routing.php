@@ -5,8 +5,10 @@ namespace System\AppLauncher\Admin;
 class Routing
 {
     private $appDirs = ['MainApp'];
+    private $baseUrl = '';
     private $urlParams = [];
     private $argumentsList = [];
+    private $argumentsListToRender = [];
     /**
      * array of routing ['url' => 'className']
      */
@@ -43,19 +45,20 @@ class Routing
             return false;
         }
 
-        $reflection = new \ReflectionClass($className);
-
-        $app = $reflection->newInstanceArgs([$serviceFactory, $configuration]);
-
-        if (!method_exists ($app, 'init')) {
+        if (!method_exists ($className, 'init')) {
             throw new RoutingException('Method <b>init()</b> does not exist in <b>'.get_class($app).'</b>');
         }
 
+        $reflection = new \ReflectionClass($className);
+
         $method = $reflection->getMethod('init');
+        $methodParameters = $method->getParameters();
 
-        $this->createInitArguments($method->getParameters());
+        $this->createInitArguments($methodParameters);
 
-        return $app;
+        $this->baseUrl = str_replace('\/', '/', $this->baseUrl);
+
+        return $reflection->newInstanceArgs([$serviceFactory, $configuration, $this->argumentsListToRender, $this->baseUrl]);
     }
 
     public function getIniValues()
@@ -71,6 +74,7 @@ class Routing
 
             if($value === false) {
                 if($param->isOptional()) {
+                    $this->argumentsListToRender[$param->name] = $param->getDefaultValue();
                     $this->argumentsList[] = $param->getDefaultValue();
                     continue;
                 }
@@ -83,6 +87,7 @@ class Routing
                 throw new RoutingException("Invalid params for this routing");
             }
 
+            $this->argumentsListToRender[$param->name] = $this->urlParams[$value+1];
             $this->argumentsList[] = $this->urlParams[$value+1];
         }
     }
@@ -124,10 +129,10 @@ class Routing
     {
         $matches = [];
         $array = explode('\/{', $index);
-        $baseUrl = $array[0];
+        $this->baseUrl = $array[0];
         unset($array[0]);
 
-        return $baseUrl.$this->insertRegex($array, 1);
+        return $this->baseUrl.$this->insertRegex($array, 1);
     }
 
     private function insertRegex($array, $index) 

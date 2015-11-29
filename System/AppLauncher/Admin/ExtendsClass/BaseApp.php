@@ -14,7 +14,7 @@ class BaseApp implements BaseInterface
 
     protected $render;
 
-    public function __construct(ServiceFactory $sf, $configuration)
+    public function __construct(ServiceFactory $sf, $configuration, $params, $mainUrl)
     {
         $this->serviceFactory = $sf;
         $this->configuration = $configuration;
@@ -24,15 +24,21 @@ class BaseApp implements BaseInterface
         $resolver = new \System\Render\AdminResolver();
         $resolver->setClassName($className);
 
-        $environment = $this->serviceFactory->getService('render.admin.environment');
+        $environment = new \System\Render\AdminEnvironment(
+            $this->serviceFactory->getService('request'),
+            $this->serviceFactory->getService('notifications'),
+            $this->serviceFactory->getService('user.active'),
+            $this->configuration->getParam('adminDir'),
+            $params,
+            $mainUrl
+        );
+
         $environment->appName = $this->appName;
         $environment->appSubName = $this->appSubName;
 
         $this->render = $this->serviceFactory->getService('render');
         $this->render->setEnvironment($environment);
         $this->render->setDefinitionResolver($resolver);
-
-        //echo  exit();
     }
 
     protected function get($name)
