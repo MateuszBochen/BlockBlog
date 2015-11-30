@@ -77,7 +77,7 @@ class Authentication
     {
         $rawString = $user->getId().$user->getCreatedAt().$user->getUserToken().$this->getRealIp();
 
-        return hash('sha256', $rawString);
+        return hash('sha512', $rawString);
     }
 
     private function getRealIp() {

@@ -60,7 +60,7 @@ class ServiceFactory
         'user.manager' => 
             [
                 'class' => 'System\User\UserManager',
-                'arguments' => ['@orm'],
+                'arguments' => ['@orm', '$secret'],
                 'prototype' => false
             ],
         'user.active' => 

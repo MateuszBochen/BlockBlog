@@ -8,10 +8,12 @@ class UserManager
 {
     private $orm;
     private $userRepository;
+    private $secret;
 
-    public function __construct($orm)
+    public function __construct($orm, $secret)
     {
         $this->orm = $orm;
+        $this->secret = $secret;
 
         $this->userRepository = $this->orm->getRepository('System\User\UserEntity\MainUser');
     }
@@ -46,6 +48,6 @@ class UserManager
     
     public function passwordHash($password, $createdAt)
     {
-        return sha1($password.'.'.$createdAt);
+        return hash('sha512', $password.'.'.$createdAt.'.'.$this->secret);
     }
 }
