@@ -17,6 +17,10 @@ body {
     }
 }
 
+a.error, span.error{
+    color: rgb(217, 83, 79);
+}
+
 #wrapper {
     padding-left: 0;
 }

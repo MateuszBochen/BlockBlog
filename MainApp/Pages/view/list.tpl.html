@@ -17,14 +17,14 @@
         @foreach $pages
             <tr>
                 <td>
-                    {{ $item->getPageName() }}
+                    <a href="{{ $item->getId() }}">{{ $item->getPageName() }}</a>
                 </td>
                 <td>
 
                 </td>
                 <td>
-                    <a href="{{ $item->getId() }}">Edit</a>
-                    <a href="{{ $item->getId() }}">Delete</a>
+                    <a href="{{ $item->getId() }}"><span class="fa fa-pencil-square-o"></span></a>
+                    <a href="{{ url('pages/delete/id/'.$item->getId()) }}" class="delete " ><span class="fa fa-times-circle error"></span></a>
                 </td>
             </tr>
         @endforeach
@@ -33,3 +33,19 @@
 </table>
 
 {{ pagination($allPages) }}
+
+
+<script>
+
+$('a.delete').click(function(){
+    var a = $(this);
+    bootbox.confirm("Are you sure?", function(result) {
+        if(result) {
+            location.href = a.attr('href');
+        }
+    });
+
+    return false; 
+});
+
+</script>
