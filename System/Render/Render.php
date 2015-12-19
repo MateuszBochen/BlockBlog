@@ -10,6 +10,8 @@ class Render
     private $atLine;
     private $cacheDir;
     private $configs;
+    private $view;
+
 
     public function __construct($cacheDir, $configs)
     {
@@ -32,12 +34,21 @@ class Render
 
     public function single($template, $data)
     {
-        echo $this->atLine->render($template, $data);
+        $this->view = $this->atLine->render($template, $data);
+
+        return $this;
     }
 
     public function base($template, $data)
     {
         $this->atLine->setDefaultExtends('base');
-        echo $this->atLine->render($template, $data);
+        $this->view = $this->atLine->render($template, $data);
+
+        return $this;
+    }
+
+    public function getView()
+    {
+        return $this->view;
     }
 }

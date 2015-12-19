@@ -2,6 +2,8 @@
 
 namespace System\AppLauncher;
 
+use System\Http\Response\Response;
+
 class AdminAppLauncher
 {
     private $serviceFactory;
@@ -13,6 +15,8 @@ class AdminAppLauncher
 
     public function __construct($serviceFactory, $configuration)
     {
+        $response = new Response();
+
         $this->serviceFactory = $serviceFactory;
         $this->configuration = $configuration;
 
@@ -27,14 +31,25 @@ class AdminAppLauncher
         $app = $this->getAppFromRouting($currentUrl, $request->getUrlParams());
 
         if ($currentUrl != $this->authenticateUrl && $currentUrl != $this->loginUrl && $isAuthorized == false) {
-            $serviceFactory->getService('response')->redirect($configuration->getParam('adminDir').'/'.$this->loginUrl);
+            $response->redirect($configuration->getParam('adminDir').'/'.$this->loginUrl);
         }
 
         if ($app[0] === false) {
             throw new AppLauncherException('Route <b>'.$currentUrl.'</b> does not exist ');
         }
 
-        call_user_func_array([$app[0], 'init'], $app[1]);
+        $class = call_user_func_array([$app[0], 'init'], $app[1]);
+
+        if ($class instanceof \System\Render\Render) {
+           $response->html($class->getView());
+        }
+        elseif($class instanceof \System\Http\Response\Response) {
+            //$response->html($class->getView());
+            // just code here something 
+        }
+        else {
+            throw new AppLauncherException('Init app must return render object or response object ');
+        }
     }
 
     private function getAppFromRouting($url, $params) 

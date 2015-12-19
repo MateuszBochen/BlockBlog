@@ -46,7 +46,7 @@ class Routing
         }
 
         if (!method_exists ($className, 'init')) {
-            throw new RoutingException('Method <b>init()</b> does not exist in <b>'.get_class($app).'</b>');
+            throw new RoutingException('Method <b>init()</b> does not exist in <b>'.$className.'</b>');
         }
 
         $reflection = new \ReflectionClass($className);

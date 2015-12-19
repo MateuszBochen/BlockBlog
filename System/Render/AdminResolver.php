@@ -20,6 +20,10 @@ class AdminResolver extends DefinitionResolver
         }
 
         if (!file_exists($file)) {
+            $file = ROOT_DIR."/".$this->className."/../view/{$definition}.tpl.html";
+        }
+
+        if (!file_exists($file)) {
             throw new \Exception("I can't find view <b>".$this->className."/view/{$definition}.tpl.html</b>");
         }
 

@@ -229,3 +229,16 @@ ul.alert-dropdown {
 .panel-yellow > a:hover {
     color: #df8a13;
 }
+
+.toggleEnabled {
+    font-size: 20px;
+    /*text-align: center;*/
+}
+
+.fa-toggle-on, .fa-toggle-off{
+    cursor: pointer;
+}
+
+/*.fa-toggle-off {
+    color: rgb(217, 83, 79);
+}*/

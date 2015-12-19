@@ -6,8 +6,7 @@ class Request
 {
     private $applicatopnPath;
     private $urlParams;
-    private $myPost = [];
-    private $myGet = [];
+    private $requestData = [];
     private $currentUrl;
 
     public function __construct()
@@ -19,8 +18,8 @@ class Request
         $this->currentUrl = trim($string, '/');
         $this->urlParams = explode('/', $this->currentUrl);
 
-        $this->myPost = $_POST;
-        $this->myGet = $_GET;
+
+        $this->prepareRequestData();
     }
 
     public function getCurrentUrl()
@@ -43,12 +42,12 @@ class Request
 
     public function post($name)
     {
-        return $this->getFromArray($name, $this->myPost);
+        return $this->getFromArray($name, $this->requestData);
     }
 
     public function get($name)
     {
-        return $this->getFromArray($name, $this->myGet);
+        return $this->getFromArray($name, $this->requestData);
     }
 
     public function getServerValue($name)
@@ -63,6 +62,61 @@ class Request
     public function getApplicatopnPath()
     {
         return $this->applicatopnPath;
+    }
+
+    public function isPost()
+    {
+        return $this->isMethod('POST');
+    }
+
+    public function isGet()
+    {
+        return $this->isMethod('GET');
+    }
+
+    public function isPut()
+    {
+        return $this->isMethod('PUT');
+    }
+
+    public function isHead()
+    {
+        return $this->isMethod('HEAD');
+    }
+
+    public function isDelete()
+    {
+        return $this->isMethod('DELETE');
+    }
+
+    public function isOptions()
+    {
+        return $this->isMethod('OPTIONS');
+    }
+
+    private function isMethod($check)
+    {
+        $method = $this->getServerValue('REQUEST_METHOD');
+
+        if($method == $check) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function prepareRequestData()
+    {
+        if ($this->isPost()) {
+            $this->requestData = $_POST;
+        }
+        elseif ($this->isGet()) {
+            $this->requestData = $_GET;
+        }
+        else {
+            $inputData = file_get_contents("php://input");
+            parse_str($inputData, $this->requestData);
+        }
     }
 
     private function getFromArray($index, &$array)

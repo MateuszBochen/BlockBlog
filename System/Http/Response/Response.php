@@ -19,4 +19,25 @@ class Response
         //die();
     }
 
+    public function html($code)
+    {
+        header('Content-Type: text/html; charset=utf-8');
+        echo $code;
+    }
+
+    public function jsonArray($array)
+    {
+        $json = json_encode($array);
+
+        return $this->json($json);
+    }
+
+    public function json($json)
+    {
+        header('Access-Control-Allow-Origin *');
+        header('Content-Type: application/json');
+        echo $json;
+
+        return $this;
+    }
 }

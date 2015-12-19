@@ -20,7 +20,7 @@
                     <a href="{{ $item->getId() }}">{{ $item->getPageName() }}</a>
                 </td>
                 <td>
-
+                    <div class="toggleEnabled" data-url="{{ url('pages/visibility/id/'.$item->getId().'/newVisibility/#current') }}" data-current="{{ $item->getDisabled() }}" ></div>
                 </td>
                 <td>
                     <a href="{{ $item->getId() }}"><span class="fa fa-pencil-square-o"></span></a>
