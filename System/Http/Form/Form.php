@@ -53,9 +53,7 @@ class Form
             }
         }
 
-        if ($noErrors) {
-            $this->fillEntity();
-        }
+        $this->fillEntity();
 
         return $noErrors;
     }
@@ -75,6 +73,10 @@ class Form
         $reflect = new \ReflectionObject($this->entity);
 
         foreach ($reflect->getProperties(\ReflectionProperty::IS_PROTECTED) as $property) {
+            if ($property->name == 'id') {
+                continue;
+            }
+
             $this->properties[] = $property->name;
         }
     }

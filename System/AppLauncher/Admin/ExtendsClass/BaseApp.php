@@ -11,6 +11,7 @@ class BaseApp implements BaseInterface
 
     private $serviceFactory;
     private $configuration;
+    private $environment;
 
     protected $render;
 
@@ -24,7 +25,7 @@ class BaseApp implements BaseInterface
         $resolver = new \System\Render\AdminResolver();
         $resolver->setClassName($className);
 
-        $environment = new \System\Render\AdminEnvironment(
+        $this->environment = new \System\Render\AdminEnvironment(
             $this->serviceFactory->getService('request'),
             $this->serviceFactory->getService('notifications'),
             $this->serviceFactory->getService('user.active'),
@@ -33,12 +34,19 @@ class BaseApp implements BaseInterface
             $mainUrl
         );
 
-        $environment->appName = $this->appName;
-        $environment->appSubName = $this->appSubName;
+        $this->environment->appName = $this->appName;
+        $this->environment->appSubName = $this->appSubName;
 
         $this->render = $this->serviceFactory->getService('render');
-        $this->render->setEnvironment($environment);
+        $this->render->setEnvironment($this->environment);
         $this->render->setDefinitionResolver($resolver);
+    }
+
+    protected function setAppName($appName)
+    {
+        $this->environment->appName = $appName;
+
+        return $this;
     }
 
     protected function get($name)

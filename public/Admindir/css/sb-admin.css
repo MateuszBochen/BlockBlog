@@ -18,7 +18,7 @@ body {
 }
 
 a.error, span.error{
-    color: rgb(217, 83, 79);
+    color: rgb(217, 83, 79) !important;
 }
 
 #wrapper {

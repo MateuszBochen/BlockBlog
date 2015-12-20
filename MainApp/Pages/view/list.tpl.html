@@ -17,13 +17,13 @@
         @foreach $pages
             <tr>
                 <td>
-                    <a href="{{ $item->getId() }}">{{ $item->getPageName() }}</a>
+                    <a href="{{ url('pages/edit/id/'.$item->getId()) }}">{{ $item->getPageName() }}</a>
                 </td>
                 <td>
                     <div class="toggleEnabled" data-url="{{ url('pages/visibility/id/'.$item->getId().'/newVisibility/#current') }}" data-current="{{ $item->getDisabled() }}" ></div>
                 </td>
                 <td>
-                    <a href="{{ $item->getId() }}"><span class="fa fa-pencil-square-o"></span></a>
+                    <a href="{{ url('pages/edit/id/'.$item->getId()) }}"><span class="fa fa-pencil-square-o"></span></a>
                     <a href="{{ url('pages/delete/id/'.$item->getId()) }}" class="delete " ><span class="fa fa-times-circle error"></span></a>
                 </td>
             </tr>

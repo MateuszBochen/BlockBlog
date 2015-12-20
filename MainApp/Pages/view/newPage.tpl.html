@@ -1,11 +1,11 @@
 <div class="row">
-    <form action="{{ url('pages/save') }}" method="post">
+    <form action="" method="post">
         <div class="col-lg-6">
             <div class="form-group">
                 <label>{{ t('site_name')}}:</label>
-                <input type="text" name="page[pageName]" class="form-control" />
+                <input type="text" name="page[pageName]" class="form-control" value="{{ $page->getPageName() }}"/>
                 <label>{{ t('page_url')}}:</label>
-                <input type="text" name="page[pageUrl]" class="form-control"/>
+                <input type="text" name="page[pageUrl]" class="form-control" value="{{ $page->getPageUrl() }}" />
                 <textarea id="pageStructJson" name="page[pageStructJson]" style="display: none;" ></textarea>
             </div>
         </div>
@@ -46,268 +46,19 @@
   </div>
 </div>
 
+
+{{ setJs('js/plugins/GridGenerator.js') }}
+
 <script>
 
-var gridGenerator = function(){
-    this.structure = [
-        [{'columns': 6, 'childrens': []}, {'columns': 6, 'childrens': []}],
-        [{'columns': 4, 'childrens': []}, {'columns': 8, 'childrens': []}]
-    ];
-    this.container;
-    this.screenHeight;
-    this.contextMenuIsOpen = false;
-    this.selectedRowIndex = -1;
-
-    this.setContainer = function(container){
-        this.container = container;
-    }
-
-    this.init = function(){
-        var self = this;
-        self.screenHeight = $(window).height();
-
-        var offset = self.container.offset();
-        
-        self.container.css('min-height', (self.screenHeight - offset.top) - 15);
-        self.mainContainerClickEvents();
-
-        self.draw();
-    };
-
-    this.initEvents = function(){
-        var self = this;
-        
-        // clik on free space
-        self.container.mousedown(function(){
-            self.selectedRowIndex = -1;
-        });
-    };
-
-    this.mainContainerClickEvents = function(){
-        var self = this;
-        /*self.container.mousedown(function(event){
-            event.stopPropagation();
-            switch (event.which) {
-                case 1:
-                    alert('Left Mouse button pressed.');
-                    break;
-                case 2:
-                    alert('Middle Mouse button pressed.');
-                    break;
-                case 3:
-                    self.createGridSelector('okejka');
-                    break;
-                default:
-                    alert('You have a strange Mouse!');
-            }
-        });*/
-    
-        self.container.on("contextmenu", function (e) {
-            self.contextMenu(e);
-            self.selectedRowIndex = -1;
-            return false;
-        });
-
-    };
-
-    this.contextMenu = function(event){
-        var self = this;
-
-        if (self.contextMenuIsOpen == true) {
-            return false;
-        }
-
-        self.contextMenuIsOpen = true;
-
-        var ul = $('<ul id="contextMenu" class="dropdown-menu" role="menu" >');
-        var addGrid = $('<li><a tabindex="-1" href="#">Insert column here</a></li>');
-        var addModule = $('<li><a tabindex="-1" href="#">Insert module</a></li>');
-
-        addGrid.click(function(){
-            self.createGridSelector();
-        });
-
-        ul.append(addGrid);
-        ul.append(addModule);
-        $('body').append(ul);
-
-        ul.css({
-            position: "absolute",
-            display: "block",
-            left: self.getMenuPosition(ul, event.clientX, 'width', 'scrollLeft'),
-            top: self.getMenuPosition(ul, event.clientY, 'height', 'scrollTop')
-        });
-
-        $('body').click(function(){
-            ul.remove();
-            self.contextMenuIsOpen = false;
-        });
-
-    };
-
-    this.createGridSelector = function(title){
-        var self = this;
-
-        var select = $('<select class="form-control" >');
-        var addButton = $('<button class="btn btn-primary">Add</button>');
-
-        var columnsInRow = self.freeColumnsInCurrentRow();
-
-        for (var i = 1; i <= columnsInRow; i++) {
-
-            var li = $('<option value="'+i+'" >'+i+' columns</li>');
-            select.append(li);
-        }
-
-        //insertColumn
-
-        var conntent = $('<div>');
-        conntent.append(select);
-        conntent.append(addButton);
-
-        var modal = self.createModal('Insert column', conntent, '');
-
-        addButton.click(function(){
-            modal.modal('hide');
-            self.insertColumn(select.val());
-        });
-    };
-
-    this.getMenuPosition = function(menu, mouse, direction, scrollDir) {
-        var win = $(window)[direction](),
-            scroll = $(window)[scrollDir](),
-            menu = menu[direction](),
-            position = mouse + scroll;
-
-        // opening menu would pass the side of the page
-        if (mouse + menu > win && menu < mouse) 
-            position -= menu;
-
-        return position;
-    };
-
-    this.createModal = function(title, body, footer) {
-        var self = this;
-        
-        var myModal = $('<div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel">');
-        var modalDialog = $('<div class="modal-dialog" role="document">');
-        var modalContent = $('<div class="modal-content">');
-        var modalHeader = $('<div class="modal-header">');
-        var closeModalButton = $('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
-
-        var modalTitle = $('<h4 class="modal-title">'+title+'</h4>');  
-        var modalBody =  $('<div class="modal-body">');
-        var modalFooter =  $('<div class="modal-footer">');   
-     
-        modalHeader.append(closeModalButton);
-        modalHeader.append(modalTitle);
-
-        modalBody.append(body);
-        modalFooter.append(footer);
-
-        modalContent.append(modalHeader);
-        modalContent.append(modalBody);
-        modalContent.append(modalFooter);
-        modalDialog.append(modalContent);
-        myModal.append(modalDialog);
-     
-        $('body').append(myModal);
-
-        myModal.modal('show');
-        myModal.on('hidden.bs.modal', function (e) {
-          myModal.remove();
-        });
-
-        return myModal;
-    };
-
-    this.freeColumnsInCurrentRow = function() {
-        var self = this;
-        var max = 12;
-        var inRow = 0;
-
-        if (self.selectedRowIndex == -1 || typeof(self.structure[self.selectedRowIndex]) == 'undefined') {
-            return max;
-        }
-
-        for (key in self.structure[self.selectedRowIndex]) {
-            inRow += +self.structure[self.selectedRowIndex][key]['columns'];
-        }
-        
-        console.log(inRow);
-
-        return max-inRow;
-    };
-
-    this.insertColumn = function(columns) {
-        var self = this;
-
-        var column = {'columns': columns, 'childrens': []};
-
-        if (self.selectedRowIndex == -1) {
-          self.structure.push([column]);  
-        }
-        else {
-            self.structure[self.selectedRowIndex].push(column);   
-        }
-
-        self.draw();
-    };
-
-    this.draw = function(parent){
-        var self = this;
-        var insertTo = self.container;
-        var array = self.structure;
-        // delete old struct
-        self.container.html(''); 
-
-        var myJsonString = JSON.stringify(array);
-
-        $('#pageStructJson').val(myJsonString);
-
-        if (parent) {
-            insertTo = parent.html;
-            array = parent.struct;
-        }
-
-        for (key in array) {
-            var row = $('<div class="row">');
-            var columns = array[key];
-
-            self.rowEvent(row, key);
-
-            for (index in columns) {
-                var column = columns[index];
-                var htmlColumn = $('<div class="colcol col-md-'+(column.columns)+'" >');
-
-                if(column.childrens.length > 0) {
-                    //self.draw({'html': htmlColumn, 'struct': [column.childrens]});
-                }
-
-                row.append(htmlColumn);
-            }
-            insertTo.append(row);
-        }
-    };
-
-    this.rowEvent = function(row, rowIndex){
-        var self = this;
-
-        row.mousedown(function(e){
-            e.stopPropagation();
-            console.log(rowIndex);
-            self.selectedRowIndex = rowIndex;
-        });
-
-        row.on("contextmenu", function (e) {
-            self.contextMenu(e);
-            return false;
-        });
-    };
-}
 
 
-var grid = new gridGenerator();
+
+var grid = new GridGenerator();
+
+@if $page->getPageStructJson()
+    grid.setJson('{{ $page->getPageStructJson()|raw }}')
+@endif
 
 grid.setContainer($('#pageSpace'));
 grid.init();
@@ -316,7 +67,7 @@ grid.init();
 
 <style>
 #pageSpace{
-    background-color: #4E4E45;
+    background-color: #6D6D6D;
 }
 #pageSpace .row {
     /*background-color: #828274;*/

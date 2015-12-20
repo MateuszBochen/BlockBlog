@@ -20,9 +20,15 @@ class Notifications
         $this->session->set($this->notificationsSessionName, $this->notificationsToSave);
     }
 
-    public function add($message, $type)
+    public function add($message, $type, $save = false)
     {
-        $this->notificationsToSave[$type][] = $message;
+        if ($save) {
+            $this->notificationsToSave[$type][] = $message;
+        }
+        else {
+            $this->notificationsToShow[$type][] = $message;
+        }
+
         return $this;
     }
 
