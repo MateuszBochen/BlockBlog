@@ -113,7 +113,6 @@ var GridGenerator = function(){
         ul.append(addAttribute);
         ul.append(deleteColumn);
 
-
         deleteColumn.click(function(){
             bootbox.confirm("Are you sure?", function(result) {
                 if(result) {
@@ -139,21 +138,108 @@ var GridGenerator = function(){
 
             return false;
         });
-        
+
+        addAttribute.click(function(){
+            var columnIndex = self.lastcontextmenuColumn.attr('data-index');
+            var column = self.structure[self.selectedRowIndex][columnIndex];
+
+            self.columnAttributes(column);
+            self.closeContextMenu();
+
+            return false;
+        });
+    };
+
+    this.columnAttributes = function(column) {
+        var self = this;
+        var attributes = column.attributes || {};
+
+        var titleRow = $('<div class="row form-group">');
+        var colAttrName = $('<div class="col-md-5">Name</div>');
+        var colAttrValue = $('<div class="col-md-5">Value</div>');
+        var colAttrDelete = $('<div class="col-md-2">Delete</div>');
+
+        titleRow.append(colAttrName);
+        titleRow.append(colAttrValue);
+        titleRow.append(colAttrDelete);
+
+        var conntent = $('<div >');
+        var footer = $('<div >');
+
+        conntent.append(titleRow);
+
+        var buttonAddNew = $('<button class="btn btn-primary" >Add new atribute</button>');
+        var buttonSave = $('<button class="btn btn-success" >Apply changes</button>');
+
+        for (name in attributes) {
+            conntent.append(self.createAttributeRowElement(name, attributes[name]));
+        }
+
+        // clear
+        attributes = {};
+
+        buttonAddNew.click(function() {
+            conntent.append(self.createAttributeRowElement('', ''));
+        });
+
+        buttonSave.click(function() {
+
+            var names = [];
+            var values = [];
+
+            $('input.names', conntent).each(function() {
+                names.push($(this).val());
+            });
+
+            $('input.values', conntent).each(function() {
+                values.push($(this).val());
+            });
+
+            for(i in names) {
+               attributes[names[i]] = values[i];
+            }
+
+            column['attributes'] = attributes;
+
+            self.draw();
+            modal.modal('hide');
+            return false;
+        });
+
+        footer.append(buttonAddNew);
+        footer.append(buttonSave);
+
+        var modal = self.createModal('Add attribute', conntent, footer);
+    };
+
+    this.createAttributeRowElement = function(name, value) {
+        var inputsRow = $('<div class="row form-group">');
+        var inputAttrName = $('<div class="col-md-5">').append('<input type="text" class="names form-control" placeholder="Name" value="'+name+'" />');
+        var inputAttrValue = $('<div class="col-md-5">').append('<input type="text" class="values form-control" placeholder="Value" value="'+value+'"/>');
+        var inputAttrDelete = $('<div class="col-md-2">').append('<a href="#" class="error" ><i class="fa fa-times-circle error"></i></a></br>');
+
+        inputsRow.append(inputAttrName);
+        inputsRow.append(inputAttrValue);
+        inputsRow.append(inputAttrDelete);
+
+        $('a', inputAttrDelete).click(function(){
+            inputsRow.remove();
+            return false;
+        });
+
+        return inputsRow;
     };
 
     this.removeColumn = function(row, column) {
         var self = this;
         var array = self.structure;
         var newStruct = [];
-        console.log(array);
+
         for (key in array) {
             var columns = array[key];
             newStruct[key] = [];
 
             for (index in columns) {
-                console.log([key, index]);
-                console.log([row, column]);
                 if (key == row && index == column) {
                     continue;
                 }
@@ -266,8 +352,6 @@ var GridGenerator = function(){
         for (key in self.structure[self.selectedRowIndex]) {
             inRow += +self.structure[self.selectedRowIndex][key]['columns'];
         }
-        
-        console.log(inRow);
 
         return max-inRow;
     };
