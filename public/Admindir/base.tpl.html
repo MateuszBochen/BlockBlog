@@ -83,8 +83,11 @@
                     </li>
                     <li>
                         <a href="{{ url('pages/create') }}"><i class="fa fa-fw fa-file-o"></i> {{ t('create_new_page') }}</a>
+                    </li>
+                    <li>
                         <a href="{{ url('pages/list') }}"><i class="fa fa-fw fa-th-list"></i> {{ t('show_pages') }}</a>
                     </li>
+                    {{ getMenu() }}
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

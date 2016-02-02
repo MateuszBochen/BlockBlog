@@ -3,6 +3,7 @@
 namespace System\AppLauncher;
 
 use System\Http\Response\Response;
+use System\AppLauncher\Admin;
 
 class AdminAppLauncher
 {
@@ -12,6 +13,9 @@ class AdminAppLauncher
     private $loginUrl = 'login';
     private $authenticateUrl = 'authenticate';
     private $render;
+    private $loadDataFromApps;
+    private $initValues = [];
+    private $urlParams = [];
 
     public function __construct($serviceFactory, $configuration)
     {
@@ -21,29 +25,26 @@ class AdminAppLauncher
         $this->configuration = $configuration;
 
         $request = $serviceFactory->getService('request');
+        $this->urlParams = $request->getUrlParams();
         $currentUrl = $request->getCurrentUrl();
+        $currentUrl = $this->clearCurrentUrlFromAdminDir($currentUrl);
 
         $authentication = $serviceFactory->getService('authentication');
         $isAuthorized = $authentication->isAuthorize();
 
-        $currentUrl = $this->clearCurrentUrlFromAdminDir($currentUrl);
-
-        $app = $this->getAppFromRouting($currentUrl, $request->getUrlParams());
+        $this->loadDataFromApps = new Admin\Loaders\RoutingDataSeparator();        
 
         if ($currentUrl != $this->authenticateUrl && $currentUrl != $this->loginUrl && $isAuthorized == false) {
             $response->redirect($configuration->getParam('adminDir').'/'.$this->loginUrl);
         }
 
-        if ($app[0] === false) {
-            throw new AppLauncherException('Route <b>'.$currentUrl.'</b> does not exist ');
-        }
+        $app = $this->getAppFromRouting($currentUrl);
+        $responseClass = call_user_func_array([$app, 'init'], $this->initValues);
 
-        $class = call_user_func_array([$app[0], 'init'], $app[1]);
-
-        if ($class instanceof \System\Render\Render) {
-           $response->html($class->getView());
+        if ($responseClass instanceof \System\Render\Render) {
+           $response->html($responseClass->getView());
         }
-        elseif($class instanceof \System\Http\Response\Response) {
+        elseif($responseClass instanceof \System\Http\Response\Response) {
             //$response->html($class->getView());
             // just code here something 
         }
@@ -52,17 +53,85 @@ class AdminAppLauncher
         }
     }
 
-    private function getAppFromRouting($url, $params) 
+    private function getAppFromRouting($url) 
     {
-        $routeClass = new \System\AppLauncher\Admin\Routing($params);
-        $app = $routeClass->getApp($url, $this->serviceFactory, $this->configuration);
-        $initValues = $routeClass->getIniValues();
+        $routeClass = new Admin\Routing($this->urlParams, $this->loadDataFromApps->getRoutingData());
+        $appName = $routeClass->getAppName($url);
 
-        return [$app, $initValues];
+        if (!$appName) {
+            throw new AppLauncherException('Route <b>'.$currentUrl.'</b> does not exist ');
+        }
+
+        if (!method_exists ($appName, 'init')) {
+            throw new AppLauncherException('Method <b>init()</b> does not exist in <b>'.$appName.'</b>');
+        }
+
+        return $this->initApp($appName);
     }
 
     private function clearCurrentUrlFromAdminDir($url)
     {
         return trim(str_replace($this->configuration->getParam('adminDir'), '', $url), '/');
+    }
+
+    private function initApp($className)
+    {
+        $reflection = new \ReflectionClass($className);
+        $method = $reflection->getMethod('init');
+        $methodParameters = $method->getParameters();
+        $initArgumentsList = $this->createInitArguments($methodParameters);
+        //$this->baseUrl = str_replace('\/', '/', $this->baseUrl);
+
+        return $reflection->newInstanceArgs([$this->serviceFactory, $this->configuration, $this->prepareAdminEnvironment($initArgumentsList)]);
+    }
+
+    private function createInitArguments($params)
+    {
+        $argumentsListToConstructor = [];
+
+        foreach ($params as $param) {
+
+            $value = array_search($param->name, $this->urlParams);
+
+            if($value === false) {
+                if($param->isOptional()) {
+                    $argumentsListToConstructor[$param->name] = $param->getDefaultValue();
+                    $this->initValues[] = $param->getDefaultValue();
+                    continue;
+                }
+                else {
+                    throw new Admin\RoutingException("Invalid params for this routing");
+                }
+            }
+
+            if(!isset($this->urlParams[$value+1])){
+                throw new Admin\RoutingException("Invalid params for this routing");
+            }
+
+            $argumentsListToConstructor[$param->name] = $this->urlParams[$value+1];
+            $this->initValues[] = $this->urlParams[$value+1];
+        }
+
+        return $argumentsListToConstructor;
+    }
+
+    private function prepareAdminEnvironment($initArguments)
+    {
+        $menu = new \System\AppLauncher\Admin\MenuBuilder(
+            $this->loadDataFromApps->getMenuData(),
+            $this->serviceFactory->getService('request'),
+            $this->serviceFactory->getService('translator'),
+            $this->configuration->getParam('adminDir')
+        );
+
+        return new \System\Render\AdminEnvironment(
+            $this->serviceFactory->getService('request'),
+            $this->serviceFactory->getService('notifications'),
+            $this->serviceFactory->getService('user.active'),
+            $this->configuration->getParam('adminDir'),
+            $initArguments,
+            '',
+            $menu
+        );
     }
 }

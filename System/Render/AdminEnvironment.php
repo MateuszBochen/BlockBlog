@@ -12,11 +12,12 @@ class AdminEnvironment extends Environment
     private $user;
     private $appParams = [];
     private $appMainUrl = '';
+    private $menu;
 
     public $appName;
     public $appSubName;
 
-    public function __construct($request, $notifications, $user, $admindir, $appParams, $appMainUrl)
+    public function __construct($request, $notifications, $user, $admindir, $appParams, $appMainUrl, $menu)
     {
         $this->request = $request;
         $this->notifications = $notifications;
@@ -24,6 +25,12 @@ class AdminEnvironment extends Environment
         $this->user = $user->getUser();
         $this->appParams = $appParams;
         $this->appMainUrl = $appMainUrl;
+        $this->menu = $menu;
+    }
+
+    public function getMenu()
+    {
+        return $this->menu->buildMainMenu();
     }
 
     public function _setAppParams()
@@ -58,7 +65,7 @@ class AdminEnvironment extends Environment
 
     public function url($url)
     {
-        return $this->request->getApplicatopnPath().'/'.$this->admindir.'/'.trim($url, '/');
+        return $this->menu->url($url);
     }
 
     public function appUlr($params)

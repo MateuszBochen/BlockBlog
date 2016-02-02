@@ -74,6 +74,12 @@ class ServiceFactory
                 'class' => 'System\Render\Render',
                 'arguments' => ['$cacheDir', '$render'],
                 'prototype' => false
+            ],
+        'translator' => 
+            [
+                'class' => 'System\Languages\Translator',
+                'arguments' => [],
+                'prototype' => false
             ]/*,
         'render.admin.environment' => 
             [
